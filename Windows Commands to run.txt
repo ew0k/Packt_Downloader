@@ -1,0 +1,2 @@
+packt-cli --grabd --status_mail --cfgpath "D:\OneDrive - rit.edu\Documents\Tech Books\Packt Daily Download Script Files\configFile.cfg"
+python "D:\OneDrive - rit.edu\Documents\Python Projects\Packt_Downloader\Packt Free Helper Script.py"

@@ -3,33 +3,72 @@ import os
 import shutil
 from pathlib import Path
 
-def main ():
-    if len(sys.argv) != 2:
-        print("Forgot Book Name")
-        exit(1)
-    book_name = sys.argv[1]
-    packt_book_path = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Free/Packt Free")
-    new_book_path = packt_book_path / book_name
-    if new_book_path.exists():
-        print("Book path already exisits in Tech Books folder")
-        exit(1)
-    else:
-        os.mkdir(new_book_path)
-    
-    # Move books from "Downloads/Pack Downloads" folder to the folder inside of "Tech Books"
-    packt_downloads_path = Path("C:/Users/Jake/OneDrive - rit.edu/Downloads/Packt Downloads")
-    if not packt_downloads_path.exists():
-        os.mkdir(packt_downloads_path)
-    for curr_dir, dirs, files in os.walk(packt_downloads_path):
+
+PACKT_BOOKS_DOWNLOAD_PATH = "D:/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/Tmp Download"
+PACKT_BOOKS_FINAL_PATH = "D:/OneDrive - rit.edu/Documents/Tech Books/Free/Packt Free"
+
+
+def grab_name(download_path):
+    file_name = ""
+    for curr_dir, dirs, files in os.walk(download_path):
         for file in files:
-            shutil.move(packt_downloads_path / file, new_book_path / file)
-    
-    # Rename Files
-    for curr_dir, dirs, files in os.walk(new_book_path):
+            tmp_file_name = os.path.splitext(file)[0]
+            if tmp_file_name != file_name and file_name != "":
+                # print("Error: probably have more than one book in the tmp download folder")
+                exit(1)
+            else:
+                file_name = tmp_file_name
+    return file_name
+
+
+def erase_folder_contents(folder):
+    # print("Erasing all files in:", folder)
+    for curr_dir, dirs, files in os.walk(folder):
+        for file in files:
+            # print("Erasing:", file)
+            os.remove(folder / file)
+
+
+def rename_files(folder, name):
+    for curr_dir, dirs, files in os.walk(folder):
         for file in files:
             file_name_extension = os.path.splitext(file)[1]
             if file_name_extension == ".zip":
-                os.rename(new_book_path / file, str(new_book_path / book_name) + " Code Files" + file_name_extension)
-            else:
-                os.rename(new_book_path / file, str(new_book_path / book_name) + file_name_extension)
+                os.rename(folder / file, str(folder / name) + " Code Files" + file_name_extension)
+
+
+def move_files(download_path, final_path, name):
+    """
+    1) copy all files in tmp_path into final_path with the new name
+    2) append "Code Files" to .zip file
+    3) check to make sure the book isn't already there and erase tmp folder if it is
+    """
+    
+    # Check to see is the book is already there
+    book_folder = final_path / name
+    if book_folder.exists():
+        # print("Book is already there")
+        erase_folder_contents(download_path)
+        exit(1)
+    else:
+        os.mkdir(book_folder)
+
+    # Rename all files in the downloads directory
+    rename_files(download_path, name)
+
+    # Move Files
+    for curr_dir, dirs, files in os.walk(download_path):
+        for file in files:
+            shutil.move(download_path / file, book_folder / file)
+
+
+def main ():
+    # Set Variables
+    download_path = Path(PACKT_BOOKS_DOWNLOAD_PATH)
+    final_path = Path(PACKT_BOOKS_FINAL_PATH)
+
+    # Move Files
+    file_name = grab_name(download_path)
+    move_files(download_path, final_path, file_name)
+    
 main()
