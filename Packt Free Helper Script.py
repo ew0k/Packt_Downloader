@@ -78,7 +78,6 @@ def main ():
     os.chdir(script_dir)
     logger("Current directory: " + os.getcwd())
     cmd = "packt-cli --grabd --status_mail >> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-log.txt\" 2> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-error-log.txt\""
-    # cmd = "ipconfig >> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-log.txt\" 2> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-error-log.txt\""
     logger("Running this cmd: " + cmd)
     os.system(cmd)
     logger("Finished packt-cli")
