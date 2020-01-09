@@ -34,7 +34,14 @@ def erase_folder_contents(folder):
 def rename_files(folder, name):
     for curr_dir, dirs, files in os.walk(folder):
         for file in files:
+            file_name = os.path.splitext(file)[0]
             file_name_extension = os.path.splitext(file)[1]
+            if "_" in file_name:
+                logger("Replacing underscore(s) in " + file_name)
+                file_name = file_name.replace("_", " ")
+                logger("Old file_name: " + str(folder / file))
+                logger("New file_name: " + str(folder/file_name) + file_name_extension)
+                os.rename(folder / file, str(folder/file_name) + file_name_extension)
             if file_name_extension == ".zip":
                 os.rename(folder / file, str(folder / name) + " Code Files" + file_name_extension)
 
@@ -73,13 +80,15 @@ def logger(message):
 
 def main ():
     logger("\n")
-    #Grab Books
+    # Grab Books
     script_dir = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files")
     os.chdir(script_dir)
     logger("Current directory: " + os.getcwd())
     cmd = "packt-cli --grabd --status_mail >> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-log.txt\" 2> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-error-log.txt\""
     logger("Running this cmd: " + cmd)
-    os.system(cmd)
+    # os.system(cmd)
+    # logger("PATH: " + os.environ['PATH'])
+    subprocess.call(cmd, shell=True)
     logger("Finished packt-cli")
 
     logger("Starting my code")
@@ -89,6 +98,7 @@ def main ():
 
     # Move Files
     file_name = grab_name(download_path)
+    file_name = file_name.replace("_", " ")
     move_files(download_path, final_path, file_name)
     logger("Finished my code")
 
