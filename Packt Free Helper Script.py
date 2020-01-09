@@ -2,10 +2,12 @@ import sys
 import os
 import shutil
 from pathlib import Path
+from datetime import datetime
+import subprocess
 
 
-PACKT_BOOKS_DOWNLOAD_PATH = "D:/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/Tmp Download"
-PACKT_BOOKS_FINAL_PATH = "D:/OneDrive - rit.edu/Documents/Tech Books/Free/Packt Free"
+PACKT_BOOKS_DOWNLOAD_PATH = "C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/Tmp Download"
+PACKT_BOOKS_FINAL_PATH = "C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Free/Packt Free"
 
 
 def grab_name(download_path):
@@ -14,7 +16,7 @@ def grab_name(download_path):
         for file in files:
             tmp_file_name = os.path.splitext(file)[0]
             if tmp_file_name != file_name and file_name != "":
-                # print("Error: probably have more than one book in the tmp download folder")
+                logger("ERROR: probably have more than one book in the tmp download folder")
                 exit(1)
             else:
                 file_name = tmp_file_name
@@ -22,10 +24,10 @@ def grab_name(download_path):
 
 
 def erase_folder_contents(folder):
-    # print("Erasing all files in:", folder)
+    logger("Erasing all files in: " + str(folder))
     for curr_dir, dirs, files in os.walk(folder):
         for file in files:
-            # print("Erasing:", file)
+            logger("Erasing: " + file)
             os.remove(folder / file)
 
 
@@ -47,8 +49,9 @@ def move_files(download_path, final_path, name):
     # Check to see is the book is already there
     book_folder = final_path / name
     if book_folder.exists():
-        # print("Book is already there")
+        logger("ERROR: \"" + name + "\" is already in the Tech Books folder")
         erase_folder_contents(download_path)
+        logger("EXITING")
         exit(1)
     else:
         os.mkdir(book_folder)
@@ -62,7 +65,25 @@ def move_files(download_path, final_path, name):
             shutil.move(download_path / file, book_folder / file)
 
 
+def logger(message):
+    log_file_path = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-log.txt")
+    with open(log_file_path, "a") as log_file:
+        log_file.write(datetime.now().strftime("%H:%M:%S") + " " + message + "\n")
+
+
 def main ():
+    logger("\n")
+    #Grab Books
+    script_dir = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files")
+    os.chdir(script_dir)
+    logger("Current directory: " + os.getcwd())
+    cmd = "packt-cli --grabd --status_mail >> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-log.txt\" 2> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-error-log.txt\""
+    # cmd = "ipconfig >> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-log.txt\" 2> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/run-scrips-error-log.txt\""
+    logger("Running this cmd: " + cmd)
+    os.system(cmd)
+    logger("Finished packt-cli")
+
+    logger("Starting my code")
     # Set Variables
     download_path = Path(PACKT_BOOKS_DOWNLOAD_PATH)
     final_path = Path(PACKT_BOOKS_FINAL_PATH)
@@ -70,5 +91,7 @@ def main ():
     # Move Files
     file_name = grab_name(download_path)
     move_files(download_path, final_path, file_name)
-    
+    logger("Finished my code")
+
+
 main()
