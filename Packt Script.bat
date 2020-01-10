@@ -1,1 +1,1 @@
-C:\Users\Jake\AppData\Local\Programs\Python\Python37-32\python.exe "C:\Users\Jake\OneDrive - rit.edu\Documents\Python Projects\Packt_Downloader\Packt Free Helper Script.py"
+C:\Users\Jake\AppData\Local\Programs\Python\Python37-32\python.exe "C:\Users\Jake\OneDrive - rit.edu\Documents\Python Projects\Packt_Downloader\Packt Downloader.py"
