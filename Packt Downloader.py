@@ -11,6 +11,9 @@ PACKT_BOOKS_FINAL_PATH = "C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/
 
 
 def grab_name(download_path):
+    """
+    Think about grabbing this information from the Log File. That's the only source that seems to always be right.
+    """
     file_name = ""
     for curr_dir, dirs, files in os.walk(download_path):
         for file in files:
@@ -21,6 +24,7 @@ def grab_name(download_path):
             else:
                 file_name = tmp_file_name
     file_name = file_name.replace("_", " ")
+    file_name = file_name.replace("Hands On", "Hands-On")
     return file_name
 
 
@@ -37,6 +41,7 @@ def rename_files(folder, name):
         for file in files:
             file_name_extension = os.path.splitext(file)[1]
             old_name = str(file)
+            new_name = ""
 
             if file_name_extension == ".zip":
                 new_name = name + " Code Files" + file_name_extension
