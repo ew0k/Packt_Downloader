@@ -6,8 +6,8 @@ from datetime import datetime
 import subprocess
 
 
-PACKT_BOOKS_DOWNLOAD_PATH = "C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/Tmp Download"
-PACKT_BOOKS_FINAL_PATH = "C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Free/Packt Free"
+PACKT_BOOKS_DOWNLOAD_PATH = "C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Resources/Books/Packt Daily Download Script Files/Tmp Download"
+PACKT_BOOKS_FINAL_PATH = "C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Resources/Books/Free/Packt Free"
 
 
 def grab_name(download_path):
@@ -76,7 +76,7 @@ def exit_code(exit_number):
 
 
 def logger(log_type, message):
-    log_file_path = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/Packt Downloader.log")
+    log_file_path = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Resources/Books/Packt Daily Download Script Files/Packt Downloader.log")
     with open(log_file_path, "a") as log_file:
         if (message == "\n"):
             log_file.write("\n")
@@ -91,11 +91,11 @@ def main ():
     logger("INFO", "Starting Script")
 
     # Change Script Directory
-    script_dir = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files")
+    script_dir = Path("C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Resources/Books/Packt Daily Download Script Files")
     os.chdir(script_dir)
 
     # Run packt-cli
-    cmd = "packt-cli --grabd --status_mail 2> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Books/Packt Daily Download Script Files/Packt Downloader Errors.log\""
+    cmd = "packt-cli --grabd --status_mail 2> \"C:/Users/Jake/OneDrive - rit.edu/Documents/Tech Resources/Books/Packt Daily Download Script Files/Packt Downloader Errors.log\""
     logger("INFO", "Running the following command: " + cmd)
     subprocess.call(cmd, shell=True)
     logger("INFO", "Finished packt-cli")
